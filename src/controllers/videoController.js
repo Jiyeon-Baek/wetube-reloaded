@@ -87,23 +87,16 @@ export const postUpload = async (req, res) => {
   const { video, thumb } = req.files;
   //we will add a video to the videos array
   const { title, description, hashtags } = req.body;
-  // const video = new Video({
-  //   title,
-  //   description,
-  //   createdAt: Date.now(),
-  //   hashtags: hashtags.split(",").map((word) => `#${word}`),
-  //   meta: {
-  //     views: 0,
-  //     rating: 0,
-  //   },
-  // });
-  // await video.save();
+
+  //const isHeroku=process.env.NODE_ENV === "production"
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: video[0].path,
-      thumbUrl: thumb[0].path,
+      // fileUrl: isHeroku ? video[0].location : video[0].path,
+      fileUrl: video[0].location,
+      // thumbUrl: isHeroku ? thumb[0].location : thumb[0].path,
+      thumbUrl: thumb[0].location,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
